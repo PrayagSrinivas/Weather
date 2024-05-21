@@ -8,84 +8,8 @@ import Combine
 import SimpleToast
 import SwiftUI
 
-class WeatherData: Identifiable, Equatable {
-    let id = UUID()
-    let place: Place
-    var weather: LocalWeather?
-    
-    static func == (lhs: WeatherData, rhs: WeatherData) -> Bool {
-        lhs.id == rhs.id
-    }
-    
-    private var currentWeather: CurrentWeather? {
-        return weather?.currentWeather.first
-    }
-    
-    init(place: Place) {
-        self.place = place
-    }
-    
-    var placeName: String {
-        var result = place.name
-        if let placeRegion = place.region {
-            result += " - \(placeRegion)"
-        }
-        return result
-    }
-    
-    var currentTemp: String {
-        currentWeather?.tempFormatted ?? ""
-    }
-    
-    var currentTempDescription: String {
-        currentWeather?.weatherDescription ?? ""
-    }
-    
-    var image: Image? {
-        guard let currentWeather = currentWeather else { return nil }
-        
-        return currentWeather.image(sunriseTime: sunriseTime, sunsetTime: sunsetTime)
-    }
-    
-    var sunriseTime: String {
-        guard let astronomy = weather?.dailyWeather.first?.astronomy.first else { return "" }
-        
-        return astronomy.sunriseFormatted
-    }
-    
-    var sunsetTime: String {
-        guard let astronomy = weather?.dailyWeather.first?.astronomy.first else { return "" }
-        
-        return astronomy.sunsetFormatted
-    }
-}
-
-enum MainViewState: Equatable {
-    case none
-    case loadingPlaces
-    case fetchingWeatherForPlace(place: Place)
-    case fetchingWeathersData
-    case editingPlaces
-    
-    static func == (lhs: MainViewState, rhs: MainViewState) -> Bool {
-        switch (lhs, rhs) {
-        case (.none, .none):
-            return true
-        case (.loadingPlaces, .loadingPlaces):
-            return true
-        case (.fetchingWeathersData, .fetchingWeathersData):
-            return true
-        case (.editingPlaces, .editingPlaces):
-            return true
-        case (.fetchingWeatherForPlace(let lhsPlace), .fetchingWeatherForPlace(let rhsPlace)):
-            return lhsPlace == rhsPlace
-        default:
-            return false
-        }
-    }
-}
-
 class MainViewModel: ObservableObject {
+    
     private let weatherService: WeatherService
     private var cancellables = Set<AnyCancellable>()
     

@@ -7,6 +7,7 @@
 import SwiftUI
 
 class WeatherViewModel: ObservableObject {
+    
     private let localWeather: LocalWeather?
     private let place: Place?
     

@@ -32,7 +32,7 @@ private func buildContainer() -> Container {
     let container = Container()
     
     container.register(WeatherService.self) { _ in
-        WeatherServiceImpl(weatherWebRepository: WeatherWebRepository(), weatherLocalRepository: WeatherLocalRepository())
+        WeatherServiceImplementation(weatherWebRepository: WeatherWebRepository(), weatherLocalRepository: WeatherLocalRepository())
     }
     .inObjectScope(.container)
     

@@ -7,11 +7,13 @@
 import SwiftUI
 
 struct WeatherView: View {
+    
+    @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel: WeatherViewModel = Resolver.shared.resolve(WeatherViewModel.self)
+    
     var isSheet: Bool
     var canSave: Bool
     var addPlaceCallback: (() -> Void)?
-    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         NavigationView {
@@ -71,85 +73,62 @@ struct WeatherView: View {
     }
     
     private var currentWeatherView: some View {
-        return AnyView(
-            HStack {
-                VStack(spacing: 4) {
-                    Text(viewModel.placeName)
-                        .font(.title)
-                        .fontWeight(.medium)
-                    HStack {
-                        viewModel.currentWeatherIcon?
-                            .renderingMode(.original)
-                            .imageScale(.small)
-                        Text("\(viewModel.currentTemp)")
-                            .fontWeight(.semibold)
-                    }.font(.system(size: 54))
-                        .frame(maxWidth: .infinity)
-                    Text("\(viewModel.currentTempDescription) - \(GlobalText.feelsLike(viewModel.feelsLike))")
-                        .foregroundColor(.secondary)
-                }
+        HStack {
+            VStack(spacing: 4) {
+                currentPlaceTitle
+                currentTemperature
+                currentTempDescription
             }
-        )
+        }
     }
     
     private var currentSummaryView: some View {
-        return AnyView(
-            VStack {
-                ZStack {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 6) {
-                            detailView(text: viewModel.sunriseTime,
-                                       image: .init(systemName: "sunrise"),
-                                       offset: .init(width: 0, height: -2))
-                            
-                            detailView(text: viewModel.sunsetTime,
-                                       image: .init(systemName: "sunset"),
-                                       offset: .init(width: 0, height: -2))
-                        }
-                        Spacer()
-                    }
-                    VStack(alignment: .leading, spacing: 6) {
-                        detailView(text: "UV: \(viewModel.uvIndex)",
-                                   image: .init(systemName: "sun.max"))
-                        
-                        detailView(text: viewModel.humidity,
-                                   image: .init(systemName: "humidity"))
-                    }
-                    
-                    HStack {
-                        Spacer()
-                        VStack(alignment: .leading, spacing: 6) {
-                            detailView(text: viewModel.windSpeed,
-                                       image: .init(systemName: "wind"))
-                            
-                            detailView(text: viewModel.windDirection,
-                                       image: .init(systemName: "arrow.up.right.circle"))
-                        }
-                    }
-                }
-                .padding()
+        VStack {
+            ZStack {
+                sunStateView
+                uvIndexView
+                windDetailsView
             }
-        )
+            .padding()
+        }
     }
     
-    private var dismissButtonView: some View {
-        return AnyView(
-            HStack {
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }, label: {
-                    Image(systemName: "list.star")
-                        .foregroundColor(.white)
-                        .padding(8)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.white.opacity(0.2), lineWidth: 1)
-                        )
-                })
+    private var sunStateView: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 6) {
+                detailView(text: viewModel.sunriseTime,
+                           image: .init(systemName: "sunrise"),
+                           offset: .init(width: 0, height: -2))
                 
-                Spacer()
-            }.padding([.top, .leading])
-        )
+                detailView(text: viewModel.sunsetTime,
+                           image: .init(systemName: "sunset"),
+                           offset: .init(width: 0, height: -2))
+            }
+            Spacer()
+        }
+    }
+    
+    private var uvIndexView: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            detailView(text: "UV: \(viewModel.uvIndex)",
+                       image: .init(systemName: "sun.max"))
+            
+            detailView(text: viewModel.humidity,
+                       image: .init(systemName: "humidity"))
+        }
+    }
+    
+    private var windDetailsView: some View {
+        HStack {
+            Spacer()
+            VStack(alignment: .leading, spacing: 6) {
+                detailView(text: viewModel.windSpeed,
+                           image: .init(systemName: "wind"))
+                
+                detailView(text: viewModel.windDirection,
+                           image: .init(systemName: "arrow.up.right.circle"))
+            }
+        }
     }
     
     private func detailView(text: String, image: Image, offset: CGSize = .zero) -> some View {
@@ -160,5 +139,28 @@ struct WeatherView: View {
                 .offset(offset)
             Text(text)
         }
+    }
+    
+    private var currentTemperature: some View {
+        HStack {
+            viewModel.currentWeatherIcon?
+                .renderingMode(.original)
+                .imageScale(.small)
+            Text("\(viewModel.currentTemp)")
+                .fontWeight(.semibold)
+        }
+        .font(.system(size: 54))
+        .frame(maxWidth: .infinity)
+    }
+    
+    private var currentTempDescription: some View {
+        Text("\(viewModel.currentTempDescription) - \(GlobalText.feelsLike(viewModel.feelsLike))")
+            .foregroundColor(.secondary)
+    }
+    
+    private var currentPlaceTitle: some View {
+        Text(viewModel.placeName)
+            .font(.title)
+            .fontWeight(.medium)
     }
 }

@@ -8,6 +8,7 @@ import SimpleToast
 import SwiftUI
 
 struct MainView: View {
+    
     @StateObject private var viewModel: MainViewModel = Resolver.shared.resolve(MainViewModel.self)
     
     var body: some View {
