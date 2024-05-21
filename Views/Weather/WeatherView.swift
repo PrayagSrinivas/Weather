@@ -20,6 +20,7 @@ struct WeatherView: View {
     var body: some View {
         VStack {
             ScrollView(.vertical, showsIndicators: false) {
+                spacer
                 currentWeatherView
                 currentSummaryView
                 hourSummary
@@ -30,18 +31,11 @@ struct WeatherView: View {
         .background {
             BackgroundView()
         }
-        .toolbar(content: {
-            if isSheet {
-                ToolbarItem(placement: .topBarLeading) {
-                    dismissButton
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    addButton
-                }
-            }
-        })
-        .navigationTitle(viewModel.placeName)
+        .navigationTitle("\(viewModel.placeName) - \(viewModel.currentTemp)")
         .navigationBarTitleDisplayMode(.inline)
+        .overlay(alignment: .top) {
+            navBar
+        }
     }
     
     // MARK: Views
@@ -153,7 +147,11 @@ struct WeatherView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
                 ForEach(viewModel.hourSummaries) { hourly in
-                    HourSummaryView(temp: viewModel.tempFor(hourly: hourly), icon: viewModel.imageFor(hourly: hourly), time: viewModel.timeFor(hourly: hourly))
+                    HourSummaryView(
+                        temp: viewModel.tempFor(hourly: hourly),
+                        icon: viewModel.imageFor(hourly: hourly),
+                        time: viewModel.timeFor(hourly: hourly)
+                    )
                 }
             }
         }
@@ -180,5 +178,33 @@ struct WeatherView: View {
             Image(systemName: "xmark.circle.fill")
                 .foregroundStyle(.white)
         })
+    }
+    
+    @ViewBuilder
+    private var navBar: some View {
+        if isSheet {
+            ZStack {
+                Text("\(viewModel.placeName) - \(viewModel.currentTemp)")
+                    .font(.headline)
+                toolbarButtons
+            }
+            .background(.ultraThinMaterial)
+        }
+    }
+    
+    private var toolbarButtons: some View {
+        HStack {
+            dismissButton.padding()
+            Spacer()
+            addButton.padding()
+        }
+    }
+    
+    @ViewBuilder
+    private var spacer: some View {
+        if isSheet {
+            Spacer()
+                .frame(height: 60)
+        }
     }
 }
