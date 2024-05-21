@@ -139,7 +139,12 @@ struct WeatherView: View {
     
     private var daySummary: some View {
         ForEach(viewModel.daySummaries) { weather in
-            DaySummaryView(day: viewModel.dayFor(weatherElement: weather), highTemp: viewModel.highTempFor(weatherElement: weather), lowTemp: viewModel.lowTempFor(weatherElement: weather), icon: viewModel.imageFor(weatherElement: weather))
+            DaySummaryView(
+                day: viewModel.dayFor(weatherElement: weather),
+                highTemp: viewModel.highTempFor(weatherElement: weather),
+                lowTemp: viewModel.lowTempFor(weatherElement: weather),
+                icon: viewModel.imageFor(weatherElement: weather)
+            )
         }
         .padding(.horizontal)
     }
