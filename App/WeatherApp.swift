@@ -13,8 +13,8 @@ var logger = Logger(label: "com.weatherapp.srinivas.main")
 struct WeatherApp: App {
     var body: some Scene {
         WindowGroup {
-			MainView()
-				.preferredColorScheme(.dark)
+            MainView()
+                .preferredColorScheme(.dark)
         }
     }
 }

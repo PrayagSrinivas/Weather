@@ -7,18 +7,18 @@
 import SwiftUI
 
 struct BackgroundView: View {
-	var body: some View {
-		ZStack {
-			LinearGradient(gradient:
-							Gradient(colors: [
-								WeatherColor.AppBackground,
-								WeatherColor.AppBackground,
-								WeatherColor.AccentColor,
-							]), startPoint: .top, endPoint: .bottomTrailing)
-
-			VisualEffectView(effect: UIBlurEffect(style: .systemMaterialDark))
-		}
-		.edgesIgnoringSafeArea(.all)
-	}
+    var body: some View {
+        ZStack {
+            LinearGradient(gradient:
+                            Gradient(colors: [
+                                WeatherColor.AppBackground,
+                                WeatherColor.AppBackground,
+                                WeatherColor.AccentColor,
+                            ]), startPoint: .top, endPoint: .bottomTrailing)
+            
+            VisualEffectView(effect: UIBlurEffect(style: .systemMaterialDark))
+        }
+        .edgesIgnoringSafeArea(.all)
+    }
 }
 
