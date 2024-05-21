@@ -8,6 +8,7 @@ import SwiftUI
 
 struct WeatherView: View {
     
+    // MARK: Properties
     @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel: WeatherViewModel = Resolver.shared.resolve(WeatherViewModel.self)
     
@@ -15,63 +16,35 @@ struct WeatherView: View {
     var canSave: Bool
     var addPlaceCallback: (() -> Void)?
     
+    // MARK: Body
     var body: some View {
-        NavigationView {
-            ZStack {
-                BackgroundView()
-                VStack {
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack {
-                            currentWeatherView
-                            currentSummaryView
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack {
-                                    ForEach(viewModel.hourSummaries) { hourly in
-                                        HourSummaryView(temp: viewModel.tempFor(hourly: hourly), icon: viewModel.imageFor(hourly: hourly), time: viewModel.timeFor(hourly: hourly))
-                                    }
-                                }
-                            }
-                            .padding()
-                            
-                            ForEach(viewModel.daySummaries) { weather in
-                                DaySummaryView(day: viewModel.dayFor(weatherElement: weather), highTemp: viewModel.highTempFor(weatherElement: weather), lowTemp: viewModel.lowTempFor(weatherElement: weather), icon: viewModel.imageFor(weatherElement: weather))
-                            }
-                            .padding(.horizontal)
-                        }
-                    }
-                    Spacer()
+        VStack {
+            ScrollView(.vertical, showsIndicators: false) {
+                currentWeatherView
+                currentSummaryView
+                hourSummary
+                daySummary
+            }
+            Spacer()
+        }
+        .background {
+            BackgroundView()
+        }
+        .toolbar(content: {
+            if isSheet {
+                ToolbarItem(placement: .topBarLeading) {
+                    dismissButton
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    addButton
                 }
             }
-            .navigationTitle(viewModel.placeName)
-            .toolbarTitleDisplayMode(.inline)
-            .toolbar(content: {
-                if isSheet {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button(action: {
-                            presentationMode.wrappedValue.dismiss()
-                        }, label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundStyle(.white)
-                        })
-                    }
-                    ToolbarItem(placement: .topBarTrailing) {
-                        if canSave {
-                            Button(action: {
-                                addPlaceCallback?()
-                                presentationMode.wrappedValue.dismiss()
-                            }, label: {
-                                Image(systemName: "plus.circle.fill")
-                                    .foregroundStyle(.white)
-                            })
-                        }
-                    }
-                }
-            })
-        }
-        
+        })
+        .navigationTitle(viewModel.placeName)
+        .navigationBarTitleDisplayMode(.inline)
     }
     
+    // MARK: Views
     private var currentWeatherView: some View {
         HStack {
             VStack(spacing: 4) {
@@ -162,5 +135,45 @@ struct WeatherView: View {
         Text(viewModel.placeName)
             .font(.title)
             .fontWeight(.medium)
+    }
+    
+    private var daySummary: some View {
+        ForEach(viewModel.daySummaries) { weather in
+            DaySummaryView(day: viewModel.dayFor(weatherElement: weather), highTemp: viewModel.highTempFor(weatherElement: weather), lowTemp: viewModel.lowTempFor(weatherElement: weather), icon: viewModel.imageFor(weatherElement: weather))
+        }
+        .padding(.horizontal)
+    }
+    
+    private var hourSummary: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack {
+                ForEach(viewModel.hourSummaries) { hourly in
+                    HourSummaryView(temp: viewModel.tempFor(hourly: hourly), icon: viewModel.imageFor(hourly: hourly), time: viewModel.timeFor(hourly: hourly))
+                }
+            }
+        }
+        .padding()
+    }
+
+    @ViewBuilder
+    private var addButton: some View {
+        if canSave {
+            Button(action: {
+                addPlaceCallback?()
+                presentationMode.wrappedValue.dismiss()
+            }, label: {
+                Image(systemName: "plus.circle.fill")
+                    .foregroundStyle(.white)
+            })
+        }
+    }
+    
+    private var dismissButton: some View {
+        Button(action: {
+            presentationMode.wrappedValue.dismiss()
+        }, label: {
+            Image(systemName: "xmark.circle.fill")
+                .foregroundStyle(.white)
+        })
     }
 }
