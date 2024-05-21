@@ -84,6 +84,7 @@ struct MainView: View {
                             Image(systemName: "minus.circle.fill")
                                 .foregroundColor(WeatherColor.AccentColor)
                         })
+                        .frame(width: 20, height: 20)
                     }
                     HStack {
                         VStack(alignment: .leading) {

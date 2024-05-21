@@ -7,27 +7,28 @@
 import SwiftUI
 
 struct HourSummaryView: View {
-	let temp: String
-	let icon: Image?
-	let time: String
-
-	var body: some View {
-		VStack(spacing: 16) {
-			Text(temp)
-				.font(.caption)
-				.fontWeight(.medium)
-			icon?
-				.renderingMode(.original)
-				.imageScale(.large)
-			Text(time)
-				.font(.caption)
-				.fontWeight(.medium)
-		}
-		.frame(width: 60, height: 90)
-		.padding(10)
-		.background(Color(.secondarySystemBackground))
-		.cornerRadius(10)
-	}
+    let temp: String
+    let icon: Image?
+    let time: String
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            Text(temp)
+                .font(.caption)
+                .fontWeight(.medium)
+            icon?
+                .renderingMode(.original)
+                .imageScale(.large)
+                .foregroundStyle(.white)
+            Text(time)
+                .font(.caption)
+                .fontWeight(.medium)
+        }
+        .frame(width: 60, height: 90)
+        .padding(10)
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(10)
+    }
 }
 
 struct HourSummaryView_Previews: PreviewProvider {
