@@ -18,3 +18,21 @@ The SwiftUI Weather app, allows users to get the current weather for a particula
 * Repository can only interacts with service layer, and service only interacts with view model.
 * And Viewmodel handles all the business logic, which can be conveyed to View, and based upon the current state on view model, view will render accordingly.
 
+### UI Refernce
+
+
+https://github.com/PrayagSrinivas/Weather/assets/78862797/64b07906-7cf4-400b-aad8-649445c1eced
+
+
+
+https://github.com/PrayagSrinivas/Weather/assets/78862797/2547a141-ea16-48da-935f-7fa1c6086569
+
+
+
+https://github.com/PrayagSrinivas/Weather/assets/78862797/c693fd64-3217-45f1-9ce1-565eebc3b848
+
+
+
+https://github.com/PrayagSrinivas/Weather/assets/78862797/b049f9f3-c6d9-4c84-bc8e-f06d02c5d0cd
+
+
