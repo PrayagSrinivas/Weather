@@ -10,6 +10,8 @@ The SwiftUI Weather app, allows users to get the current weather for a particula
 * Display the Daily weather forecast upto 5 days. 
 
 ## How to Work with the Source
+* Download Zip file from the respository link.
+* Open the Weather.xcodeproj file
 * To get the Weather app work, just load the SPM Packages, and you can run it on your latest running iOS Device.
 
 ### Architecture
